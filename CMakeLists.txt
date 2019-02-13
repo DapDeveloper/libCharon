@@ -1,15 +1,15 @@
 project(charon NONE)
-cmake_minimum_required(VERSION 3.0.2) #Tested only with 3.6.1 and 3.9.1.
+cmake_minimum_required(VERSION 3.12) #Tested only with 3.6.1 and 3.9.1.
 
-find_package(PythonInterp 3.4.2 REQUIRED)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
 option(INSTALL_SERVICE "Install the Charon DBus-service" ON)
 option(INSTALL_CLIENT "Install the Charon Client library" ON)
 
 if(EXISTS /etc/debian_version)
-    set(CHARON_INSTALL_PATH lib${LIB_SUFFIX}/python${PYTHON_VERSION_MAJOR}/dist-packages)
+    set(CHARON_INSTALL_PATH lib${LIB_SUFFIX}/python${Python3_VERSION_MAJOR}/dist-packages)
 else()
-    set(CHARON_INSTALL_PATH lib${LIB_SUFFIX}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+    set(CHARON_INSTALL_PATH lib${LIB_SUFFIX}/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages)
 endif()
 
 set(_excludes PATTERN __pycache__ EXCLUDE)
@@ -47,7 +47,7 @@ endif()
 
 add_test(
     NAME pytest-main
-    COMMAND ${PYTHON_EXECUTABLE} -m pytest --junitxml=${CMAKE_BINARY_DIR}/junit-pytest-main.xml ${CMAKE_SOURCE_DIR}/tests
+    COMMAND ${Python3_EXECUTABLE} -m pytest --junitxml=${CMAKE_BINARY_DIR}/junit-pytest-main.xml ${CMAKE_SOURCE_DIR}/tests
 )
 set_tests_properties(pytest-main PROPERTIES ENVIRONMENT LANG=C)
 set_tests_properties(pytest-main PROPERTIES ENVIRONMENT "PYTHONPATH=${_PYTHONPATH}")
